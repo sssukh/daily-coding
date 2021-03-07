@@ -12,16 +12,16 @@ public:
 		heapSize = 0;
 	}
 	void swap(int idx1, int idx2) {
-		int tmp = idx1;
-		idx1 = idx2;
-		idx2 = tmp;
+		int tmp = v[idx1];
+		v[idx1] = v[idx2];
+		v[idx2] = tmp;
 	}
 	void upheap(int idx) {
 		if (idx == 1)
 			return;
 		int parIdx = floor(idx / 2);
 		if (v[parIdx] > v[idx]) {
-			swap(v[idx], v[parIdx]);
+			swap(idx, parIdx);
 			upheap(parIdx);
 		}
 	}
@@ -44,7 +44,7 @@ public:
 		else
 			tmp = lc;
 		if (v[idx] > v[tmp]) {
-			swap(v[idx], v[tmp]);
+			swap(idx, tmp);
 			downheap(tmp);
 		}
 	}
@@ -52,12 +52,18 @@ public:
 		if (heapSize == 0)
 			return 0;
 		int tmp = v[1];
-		swap(v[1], v[heapSize]);
+		swap(1, heapSize);
 		heapSize--;
 		v.pop_back();
 		downheap(1);
-		return v[1];
+		return tmp;
 
+	}
+	void showheap() {
+		for (int i = 0; i <= heapSize; i++) {
+			cout << v[i]<<" ";
+		}
+		cout << endl;
 	}
 };
 
