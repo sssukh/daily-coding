@@ -1,11 +1,14 @@
 #include<iostream>
-#include<vector>
 using namespace std;
 
 class set {
 public:
 	int key;
 	int qty;
+	set() {
+		key = NULL;
+		qty = NULL;
+	}
 	set(int x) {
 		key = x;
 		qty = 1;
@@ -14,23 +17,40 @@ public:
 
 class sangkeun {
 public:
-	vector<int> cards;
+	set* hash;
 	int capacity;
+	int hashNum;
 	sangkeun(int size) {
 		capacity = size;
+		hash = new set[size];
+		hashNum = 7;
 	}
 	void add(int x) {
-		cards.push_back(x);
-
-	}
-	int count(int x) {
-		int tmp = 0;
-		for (int i = 0; i < capacity; i++) {
-			if (cards[i] == x) {
+		int tmp = x % hashNum;
+		if (tmp < 0)
+			tmp += hashNum;
+		while (true) {
+			if (hash[tmp].key == x) {
+				hash[tmp].qty++;
+				break;
+			}
+			else if (hash[tmp].key == NULL) {
+				hash[tmp].key = x;
+				hash[tmp].qty = 1;
+				break;
+			}
+			else {
 				tmp++;
 			}
 		}
-		return tmp;
+	}
+	int count(int x) {
+		for (int i = 0; i < capacity; i++) {
+			if (hash[i].key == x) {
+				return hash[i].qty;
+			}
+		}
+		return 0;
 	}
 };
 
