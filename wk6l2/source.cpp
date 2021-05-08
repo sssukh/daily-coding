@@ -5,69 +5,59 @@ using namespace std;
 
 int solution(string s) {
 	int answer = 1001;
+	vector<string> store;
 	int div = 1;
 	while (div < s.size()) {
-		string current="";
-		string tmp="\0";
-		int count=1;
+		int count;
+		string tmp;
 		int result=0;
-		int counter = 0;
 		for (int i = 0; i < s.size(); i++) {
-			if (i == 0) {
-				tmp = s[i];
-			
-			}
-			else if (i % div == 0) {
-				cout << current << " " << tmp << endl;
-				counter++;
-					if (current == tmp) {
-						count++;
-						if (counter==2) {
-							result -= div;
-						}
-						
-					}
-					else {
-						if (count != 1) {
-							result += floor(log10(count)) + 1;
-						}
-						result += tmp.size();
-						count = 1;
-						cout << "res :" << result << endl;
-						
-					}
-			
-				
-				current = tmp;
+			if (i % div == 0) {
+				if (i > 0) {
+					store.push_back(tmp);
+				}
 				tmp = s[i];
 			}
 			else {
 				tmp += s[i];
 			}
+		
+		}
+		store.push_back(tmp);
 
-		}
-		counter++;
-		if (current == tmp) {
-			count++;
-			if (counter == 2) {
-				result -= div;
+
+
+		for (int i = 0; i < store.size()-1; i++) {
+			count = 1;
+			
+			while (store[i] == store[i + 1]) {
+				count++;
+				
+				i++;
+				if (i == store.size() - 1) {
+					break;
+				}
+
 			}
+			if (count != 1) {
+				result += int(log10(count)) + 1;
+			}
+			result += div;
+			
 		}
-		if (count != 1) {
-			result += floor(log10(count)) + 1;
+		if (store.back() != store[store.size() - 2]) {
+			result += store.back().size();
 		}
-		result += tmp.size();
-		cout << current << " " << tmp << endl;
-		cout << "res :" << result << endl;
-		if (result < answer) {
+		
+		if (answer > result) {
 			answer = result;
-			cout << div << endl;
 		}
 		div++;
+		store.clear();
 	}
-	
+	if (answer == 1001)
+		answer = 1;
 	return answer;
-
 }
 int main() {
 	string input;
