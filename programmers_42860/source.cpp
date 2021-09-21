@@ -1,6 +1,5 @@
 #include <string>
 #include <unordered_map>
-#include <iostream>
 #include <vector>
 
 using namespace std;
@@ -39,10 +38,10 @@ int solution(string name) {
     alphabet_counter_list['X'] = 3;
     alphabet_counter_list['Y'] = 2;
     alphabet_counter_list['Z'] = 1;
-    
+
     vector<int> incorrect_char_list;
 
-    for (int i=0;i<name.size();i++)
+    for (int i = 0; i < name.size(); i++)
     {
         answer += alphabet_counter_list[name[i]];
         if (name[i] != 'A')
@@ -67,7 +66,7 @@ int solution(string name) {
             }
         }
         int min_move = 0;
-        if (distance_list[0] < distance_list.back())
+        if (distance_list[0] <= distance_list.back())
         {
             answer += distance_list[0];
             current_pos = incorrect_char_list[0];
@@ -80,67 +79,14 @@ int solution(string name) {
             incorrect_char_list.pop_back();
         }
 
-        
+
     }
 
     return answer;
-    
 
 
 
-   
-    
 
 
-    int idx = 0;
-    int max_A_length = 0;
-    int current_A_length = 0;
-    int A_start_idx = 0;
-    int A_finish_idx = 0;
 
-    while (idx < name.size() || name[(idx) % name.size()]=='A')
-    {
-        if (name[idx%name.size()] == 'A')
-        {
-            current_A_length++;
-        }
-        else
-        {
-            current_A_length = 0;
-        }
-        if (max_A_length <= current_A_length)
-        {
-            max_A_length = current_A_length;
-            A_finish_idx = idx;
-            if (A_finish_idx >= name.size())
-                A_finish_idx -= name.size();
-        }
-        idx++;
-    }
-    int add = 0;
-    if (max_A_length > 0)
-    {
-        A_start_idx = A_finish_idx - (max_A_length-1);
-        if (A_start_idx < 0)
-            A_start_idx += name.size();
-        if (A_start_idx < A_finish_idx)
-        {
-            
-
-            add = min(A_start_idx, name.size() - A_finish_idx) - 1;
-        }
-        else if (A_start_idx > A_finish_idx)
-        {
-            add = min(name.size() - A_start_idx, A_finish_idx) + 1;
-        }
-    }
-    cout << add <<" "<<max_A_length<< endl;
-
-
-    return add<max_A_length? answer - max_A_length-1+add : answer-1;
-}
-
-int main()
-{
-    cout << solution("BBBBAABBB");
 }
