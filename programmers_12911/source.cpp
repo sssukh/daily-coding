@@ -11,15 +11,15 @@ int solution(int n) {
     int needs = binary(n);
 
     int tmp = -1;
-    int adds = 0;
+    
     while (tmp != needs)
     {
-        adds++;
-        tmp = binary(n + adds);
+       
+        tmp = binary(++n );
         
     }
 
-    return n+adds;
+    return n;
 }
 
 int binary(int n)
