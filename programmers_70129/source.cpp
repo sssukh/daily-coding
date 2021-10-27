@@ -32,11 +32,7 @@ vector<int> solution(string s) {
             tmp += to_string(res);
             size /= 2;
         }
-        s = "";
-        for (int i = tmp.size() - 1; i >= 0; i--)
-        {
-            s += tmp[i];
-        }
+        s = tmp;
         count++;
     }
 
