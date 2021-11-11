@@ -2,7 +2,6 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
-#include <queue>
 
 using namespace std;
 
@@ -66,7 +65,7 @@ long long solution(string expression) { //¾Æ¿¹ ¼ıÀÚ¿Í op·Î º¯È¯ÇØ¼­ º¤ÅÍ¿¡ ÀúÀåÇ
                 cout << l << " ";
             cout << endl;
         }
-        cout << cursur1.back() << " " << cursur1.size() << endl;
+        //cout << cursur1.back() << " " << cursur1.size() << endl;
         if (answer < abs(cursur1.back()))
             answer = abs(cursur1.back());
 
