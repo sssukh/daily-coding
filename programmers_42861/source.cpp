@@ -7,8 +7,11 @@ using namespace std;
 int solution(int n, vector<vector<int>> costs) {
     int answer = 0;
 
+    vector<bool> check(n, 0);
+    check[0] = 1;
     vector<int> connected(n, 0);
     connected[0] = 0;
+    vector<int> st_island = { 0 };
     int count = 1;
     int current_island = 0;
     vector<vector<int>> map(n, vector<int>(n, 0));
@@ -24,7 +27,7 @@ int solution(int n, vector<vector<int>> costs) {
         for (int i = 0; i < n; i++)
         {
             int tmp;
-            if ((tmp=map[current_island][i])>0&&!connected[i])
+            if ((tmp=map[current_island][i])>0&&!check[i]&&i!=current_island)
             {
                 if (min.first > -1 && tmp < min.first)
                 {
@@ -36,16 +39,22 @@ int solution(int n, vector<vector<int>> costs) {
                     min.first = tmp;
                     min.second = i;
                 }
-                
             }
         }
         if (min.first != -1)
         {
-            if (connected[current_island] > min.first || connected[min.second] > 0)
+            if (connected[current_island] > min.first || check[min.second] > 0)
                 connected[current_island] = min.first;
             current_island = min.second;
             connected[min.second] = min.first;
+            check[min.second] = 1;
             count++;
+            st_island.push_back(current_island);
+        }
+        else
+        {
+            st_island.pop_back();
+            current_island = st_island.back();
         }
 
     }
