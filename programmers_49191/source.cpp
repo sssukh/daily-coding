@@ -10,21 +10,11 @@ int solution(int n, vector<vector<int>> results)
     int answer = 0;
 
     vector<vector<int>> graph(n+1, vector<int>(n+1, 0));
-    unordered_map<int, vector<int>> lose_list;
-    unordered_map<int, vector<int>> win_list;
-    for (int i = 1; i <= n; i++)
-    {
-        vector<int> win_tmp;
-        win_list[i] = win_tmp;
-        vector<int> lose_tmp;
-        lose_list[i] = lose_tmp;
-    }
+    
     for (int i = 0; i < results.size(); i++)
     {
         graph[results[i][0]][results[i][1]] = 1;
         graph[results[i][1]][results[i][0]] = -1;
-        win_list[results[i][0]].push_back(results[i][1]);
-        lose_list[results[i][1]].push_back(results[i][0]);
     }
     for (int i = 1; i <= n; i++)
     {
