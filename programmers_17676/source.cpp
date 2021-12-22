@@ -152,7 +152,7 @@ int solution(vector<string> lines) {
         if (request[i][3] == -1)
         {
             count--;
-            check_list[request[i][4]] = 0;
+            //check_list[request[i][4]] = 0;
         }
     }
 
