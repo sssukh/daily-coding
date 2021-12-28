@@ -25,11 +25,6 @@ vector<int> solution(vector<string> gems) {
         }
         else
         {
-            while (gems_position.size()>1&&gems[gems_position.front()] == gems[gems_position.back()])
-            {
-                gems_type[gems[gems_position.front()]]--;
-                gems_position.pop_front();
-            }
             while (gems_position.size()>1&&gems_type[gems[gems_position.front()]]>1)
             {
                 gems_type[gems[gems_position.front()]]--;
