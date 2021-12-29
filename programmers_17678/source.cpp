@@ -26,7 +26,6 @@ string timetostring(int time)
 string solution(int n, int t, int m, vector<string> timetable) {
     string answer = "";
     queue<int> crews;
-    vector<int> last_bus;
     int answer_int;
     sort(timetable.begin(), timetable.end(), cmp);
     for (int i = 0; i < timetable.size(); i++)
@@ -34,7 +33,7 @@ string solution(int n, int t, int m, vector<string> timetable) {
         crews.push(getCrewtime(timetable[i]));
     }
 
-
+    int last_crew;
     for (int i = 0; i < n; i++)
     {
         int current_time = 60 * 9 + i * t;
@@ -46,17 +45,17 @@ string solution(int n, int t, int m, vector<string> timetable) {
             cnt++;
             if (i == n - 1)
             {
-                last_bus.push_back(crews.front());
+                last_crew = crews.front();
             }
             crews.pop();
         }
-        if (i == n - 1 && (cnt < m || last_bus.empty()))
+        if (i == n - 1 && cnt < m )
         {
            
             return timetostring(current_time);
         }
     }
-    answer = timetostring(last_bus.back() - 1);
+    answer = timetostring(last_crew - 1);
 
     return answer;
 }
