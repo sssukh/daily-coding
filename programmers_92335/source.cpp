@@ -10,7 +10,7 @@ int solution(int n, int k) {
     int answer = 0;
 
     string num = "";
-    multiset<int> numbers_for_prime;
+    multiset<long long> numbers_for_prime;
     string tmp = "";
     
     while (n > 0)
@@ -31,19 +31,20 @@ int solution(int n, int k) {
         else
         {
             if (tmp != "")
-                numbers_for_prime.insert(stoi(tmp));
+                numbers_for_prime.insert(stoll(tmp));
             tmp = "";
         }
     }
     if (tmp != "")
-        numbers_for_prime.insert(stoi(tmp));
+        numbers_for_prime.insert(stoll(tmp));
 
    
     for (auto iter = numbers_for_prime.begin(); iter != numbers_for_prime.end(); iter++)
     {
+        if (*iter == 1)
+            continue;
         int check;
         int root = sqrt(*iter);
-        cout << *iter << " " << root << endl;
         for (check = 2; check <= root; check++)
         {
             if ((*iter % check)==0)
