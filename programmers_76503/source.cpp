@@ -1,12 +1,13 @@
 #include <string>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
 class Node
 {
 public:
-    int m_value;
+    long m_value;
     int m_idx;
     vector<Node*> incident;
     Node()
@@ -14,7 +15,7 @@ public:
         m_value = 0;
         m_idx = NULL;
     }
-    Node(int value , int idx)
+    Node(long value , int idx)
     {
         m_value = value;
         m_idx = idx;
@@ -31,6 +32,13 @@ public:
     vector<Node*> nodelist;
     Node* root;
     Tree(){}
+    ~Tree()
+    {
+        for (int i = 0; i < nodelist.size(); i++)
+        {
+            delete nodelist[i];
+        }
+    }
     void addNode(Node* node)
     {
         nodelist.push_back(node);
@@ -46,39 +54,45 @@ public:
 
 };
 
-void DFS(long long& answer, Tree& tree, int idx,int& stack)
+long DFS(long long& answer, Tree& tree, int idx,vector<bool>& visit)
 {
+    if (visit[idx])
+        return 0;
+    visit[idx] = true;
+
+
     Node* current = tree.findNode(idx);
     int chiSize = current->incident.size();
-    stack++;
-
-    if (chiSize==1)
+ 
+    for (int i = 0; i < chiSize; i++)
     {
-
+        long tmp = DFS(answer, tree, current->incident[i]->m_idx, visit);
+        //answer += abs(tmp);
+        current->m_value += tmp;
     }
-    else
-    {
-        for (int i = 0; i < chiSize; i++)
-        {
-            DFS(answer, tree, current->incident[i]->m_idx);
-        }
-    }
+    long result = current->m_value;
+    answer += abs(result);
+    current->m_value = 0;
+    return result;
 }
 
 long long solution(vector<int> a, vector<vector<int>> edges) 
 {
-    long long answer = -2;
+    long long answer = 0;
     int size = a.size();
-    int stack = 0;
-
+    vector<bool> visit(a.size(), 0);
+    vector<long> arr (a.begin(),a.end());
+    long long tmp = 0;
 
     Tree tree;
     for (int i = 0; i < size; i++)
     {
-        Node* node = new Node(a[i],i);
+        tmp += arr[i];
+        Node* node = new Node(arr[i],i);
         tree.addNode(node);
     }
-
+    if (tmp)
+        return -1;
     for (int i = 0; i < edges.size(); i++)
     {
         tree.nodelist[edges[i][0]]->addIncident(tree.nodelist[edges[i][1]]);
@@ -88,6 +102,8 @@ long long solution(vector<int> a, vector<vector<int>> edges)
     tree.setRoot(tree.nodelist[0]);
     Node* current = tree.root;
     
+    if (DFS(answer, tree, 0, visit))
+        answer = -1;
 
     return answer;
 }
