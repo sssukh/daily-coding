@@ -5,6 +5,7 @@
 #include <iostream>
 using namespace std;
 
+
 class Node
 {
 public:
@@ -23,6 +24,9 @@ public:
         num = node_num;
         x = node_x;
         y = node_y;
+        left = NULL;
+        right = NULL;
+        parent = NULL;
     }
     ~Node()
     {
@@ -40,13 +44,20 @@ public:
     {
         parent = node;
     }
+    bool operator==(Node* a)
+    {
+        return a->x == this->x && a->y == this->y && a->num == this->num;
+    }
 };
+
+
 
 class binaryTree
 {
 public:
     vector<Node*> nodelist;
     Node* root;
+    Node* empty;
     binaryTree()
     {
 
@@ -57,6 +68,7 @@ public:
         {
             delete nodelist[i];
         }
+        delete empty;
     }
     void preOrder(Node* node,vector<int>& preorder)
     {
@@ -88,23 +100,48 @@ public:
     {
         nodelist.push_back(node);
     }
-    void make_tree(int low, int high, int level)
+    
+    Node* make_tree(int low, int high, int addlevel, set<int>& levels)
     {
-        for (int i = 0; i < nodelist.size(); i++)
+        int levelsize = levels.size();
+        if (addlevel >= levelsize)
         {
-
+            return NULL;
         }
+        Node* current;
+        auto iter = levels.crbegin();
+        for (int i = 0; i < addlevel; i++)
+            iter++;
+        int level = *iter;
+        //cout << level << endl;
+        int i;
+        //cout << "low : " << low << " high : " << high << " level : " << level << endl;
+        for (i = low; i < high; i++)
+        {
+            if (nodelist[i]->y == level)
+            {
+                current = nodelist[i];
+                if (addlevel == 0)
+                    root = current;
+                //cout << current->num << endl;
+                //cout << i << endl;
+                current->addLeft(make_tree(low, i, addlevel + 1,levels));
+                current->addRight(make_tree(i, high, addlevel + 1,levels));
+                return current;
+            }
+        }
+        return NULL;
     }
+    
 };
 
 bool cmp(Node* a, Node* b)
 {
-    if (a->y == b->y)
-    {
+    
         return a->x < b->x;
-    }
-    return a->y > b->y;
+   
 }
+
 
 vector<vector<int>> solution(vector<vector<int>> nodeinfo)
 {
@@ -121,9 +158,11 @@ vector<vector<int>> solution(vector<vector<int>> nodeinfo)
         tree.addNode(node);
         levels.insert(nodeinfo[i][1]);
     }
-
-    auto iter = levels.crbegin();
-
+    
+    tree.empty = new Node(-1, -1, -1);
+    sort(tree.nodelist.begin(), tree.nodelist.end(), cmp);
+    //auto iter = levels.crbegin();
+    tree.make_tree(0, nodesize, 0, levels);
 
     /*
     levels.insert(-1);
