@@ -100,7 +100,26 @@ public:
     {
         nodelist.push_back(node);
     }
-    
+    void connect(Node* parent, Node* child)
+    {
+        if (parent->x < child->x)
+        {
+            if (parent->right)
+            {
+                connect(parent->right, child);
+            }
+            else
+                parent->addRight(child);
+        }
+        else
+        {
+            if (parent->left)
+                connect(parent->left, child);
+            else
+                parent->addLeft(child);
+        }
+    }
+    /* 2
     Node* make_tree(int low, int high, int addlevel, set<int>& levels)
     {
         int levelsize = levels.size();
@@ -132,14 +151,14 @@ public:
         }
         return NULL;
     }
-    
+    */
 };
 
 bool cmp(Node* a, Node* b)
 {
-    
+    if(a->y==b->y)
         return a->x < b->x;
-   
+    return a->y > b->y;
 }
 
 
@@ -158,13 +177,20 @@ vector<vector<int>> solution(vector<vector<int>> nodeinfo)
         tree.addNode(node);
         levels.insert(nodeinfo[i][1]);
     }
-    
+
+    sort(tree.nodelist.begin(), tree.nodelist.end(), cmp);
+    tree.root = tree.nodelist[0];
+    for (int i = 1; i < nodesize; i++)
+    {
+        tree.connect(tree.root, tree.nodelist[i]);
+    }
+    /*   2
     tree.empty = new Node(-1, -1, -1);
     sort(tree.nodelist.begin(), tree.nodelist.end(), cmp);
     //auto iter = levels.crbegin();
     tree.make_tree(0, nodesize, 0, levels);
-
-    /*
+    */
+    /*   1
     levels.insert(-1);
     sort(tree.nodelist.begin(), tree.nodelist.end(), cmp);
 
