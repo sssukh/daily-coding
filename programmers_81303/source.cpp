@@ -1,89 +1,94 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <list>
-
 using namespace std;
 
 string solution(int n, int k, vector<string> cmd)
 {
     string answer="";
-    list<bool> table(n,1);
- 
-    int current = k;
-    vector<int> removes;
+    vector<int> removes;// 제거한 표 저장
+    vector<vector<int>> table(n,vector<int>(3,1)); //0 : 존재 유무, 1: 이전, 2 : 이후
+    for (int i = 0; i < n; i++)
+    {
+        table[i][1] = i - 1;
+        table[i][2] = i + 1;
+    }
+
     for (int i = 0; i < cmd.size(); i++)
     {
-        //cout << k << endl;
-        string command = cmd[i];
-        if (command[0] == 'U')
+        string current = cmd[i];
+        if (current[0] == 'U')
         {
-            int value = stoi(command.substr(2, command.size() - 2));
-            k -= value;
-        }
-        else if (command[0] == 'D')
-        {
-            int value = stoi(command.substr(2, command.size() - 2));
-            k += value;
-        }
-        else if (command[0] == 'C')
-        {
-            removes.push_back(k);
-            auto iter = table.begin();
-            for (int j = 0; j < k; j++)
+            int value = stoi(current.substr(2, current.size() - 2));
+            for (int rep = 0; rep < value; rep++)
             {
-                iter++;
+                k = table[k][1];
             }
-            table.erase(iter);
-            if (k == table.size())
-                --k;
+        }
+        else if (current[0] == 'D')
+        {
+            int value = stoi(current.substr(2, current.size() - 2));
+            for (int rep = 0; rep < value; rep++)
+            {
+                k = table[k][2];
+            }
+        }
+        else if (current[0]=='C')
+        {
+            table[k][0] = 0;
+            removes.push_back(k);
+            if (table[k][2] == n)// 맨 뒤
+            {
+                table[table[k][1]][2] = n;
+                k = table[k][1];
+                
+            }
+            else if (table[k][1] == -1)// 맨 앞
+            {
+                table[table[k][2]][1] = -1;
+                k = table[k][2];
+            }
+            else
+            {
+                table[table[k][1]][2] = table[k][2];
+                table[table[k][2]][1] = table[k][1];
+                k = table[k][2];
+            }
         }
         else
         {
             int tmp = removes.back();
             removes.pop_back();
-            auto iter = table.begin();
-            for (int j = 0; j < k; j++)
+            table[tmp][0] = 1;
+            if (table[tmp][2] == n)
             {
-                iter++;
+                table[table[tmp][1]][2] = tmp;
             }
-            table.insert(iter,1);
-            if (k >= tmp)
-                ++k;
+            else if (table[tmp][1] == -1)
+            {
+                table[table[tmp][2]][1] = tmp;
+            }
+            else
+            {
+                table[table[tmp][1]][2] = tmp;
+                table[table[tmp][2]][1] = tmp;
+            }
         }
     }
-    /*
     for (int i = 0; i < n; i++)
     {
         answer += "O";
     }
-
-    for (int i : removes)
+    for (int i = 0; i < removes.size(); i++)
     {
-        answer[i] = 'X';
+        answer[removes[i]] = 'X';
     }
-    */
-    
-    while (!removes.empty())
-    {
-        int tmp = removes.back();
-        removes.pop_back();
-        auto iter = table.begin();
-        for (int j = 0; j < tmp; j++)
-        {
-            iter++;
-        }
-        table.insert(iter, 0);
-    }
-    for (bool i : table)
-    {
-        if (i)
-            answer += "O";
-        else
-            answer += "X";
-    }
-
-    
-
     return answer;
+}
+
+int main()
+{
+    vector<string> cmd = { "D 2","C","U 3","C","D 4","C","U 2","Z","Z" };
+    
+    cout << solution(8, 2, cmd);
 }
