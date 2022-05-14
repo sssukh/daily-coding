@@ -14,7 +14,7 @@ void pushQ(int lo, int hi, queue<pair<int,int>>& q, pair<int,int> push)
 int main()
 {
 	int N, K;
-	bool pos[100000] = { 0, };
+	bool pos[100001] = { 0, };
 	cin >> N >> K;
 	queue<pair<int,int>> q;
 	
