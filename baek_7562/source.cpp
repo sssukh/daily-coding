@@ -37,7 +37,7 @@ int main()
 				q.push({ crt.x + 2,crt.y + 1,crt.time + 1 });
 				q.push({ crt.x + 2,crt.y - 1,crt.time + 1 });
 				q.push({ crt.x - 2,crt.y + 1,crt.time + 1 });
-				q.push({ crt.x - 2,crt.y + 1,crt.time + 1 });
+				q.push({ crt.x - 2,crt.y - 1,crt.time + 1 });
 				q.push({ crt.x + 1,crt.y + 2,crt.time + 1 });
 				q.push({ crt.x - 1,crt.y + 2,crt.time + 1 });
 				q.push({ crt.x + 1,crt.y - 2,crt.time + 1 });
