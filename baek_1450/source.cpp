@@ -16,9 +16,9 @@ vector<int> getWeights(vector<int>& items,int M)
 			for (int i = 0; i < cases.size(); i++)
 			{
 				if (cases[i])
-					total += items[i];
+					total += (long long)items[i];
 			}
-			if (total <= M)
+			if (total <= (long long)M)
 				weights.push_back(total);
 		} while (next_permutation(cases.begin(), cases.end()));
 	}
@@ -28,7 +28,8 @@ vector<int> getWeights(vector<int>& items,int M)
 
 int main()
 {
-	int N, M , ret =0;
+	int N, M ;
+	long long ret = 0;
 	cin >> N >> M;
 	vector<int> items(N);
 	for (int i = 0; i < N; i++)
@@ -44,23 +45,23 @@ int main()
 	vector<int> forward_values = getWeights(forward,M);
 	vector<int> backward_values = getWeights(backward,M);
 	
-
+	
 	for (int i = 0; i < forward_values.size(); i++)
 	{
 		int mid,left = 0, right = backward_values.size() - 1, target = M-forward_values[i];
-		while (left <= right)
+		while (left < right)
 		{
 			mid = (left + right) / 2;
 			if (backward_values[mid] > target)
-				right = mid - 1;
-			else if (backward_values[mid] == target)
-				break;
+				right = mid;
 			else
 				left = mid + 1;
 		}
-		while (backward_values[mid] > target)
-			--mid;
-		ret += mid + 1;
+
+		ret += mid;
 	}
+	
+
+
 	cout << ret;
 }
